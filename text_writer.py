@@ -1,8 +1,8 @@
 from time import sleep
 import os
 
-g = lambda com: os.system(com)
-g('pip install pyautogui')
+t = lambda com: os.system(com)
+t('pip install pyautogui')
 sleep(2)
 
 import pyautogui
