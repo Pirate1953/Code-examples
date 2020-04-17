@@ -5,10 +5,9 @@
     2) создать директроию sigs
 """
 
-process_name = "iw4sp.exe" #Имя процесса
+process_name = "gameName.exe" #Имя процесса
 signatures = "" #Зафиксированные сигнатуры
 mode = 1 #Режим
-v = "1.0" #Версия ПО
 scan_delay = 3 #Промежуток сканирования сигнатур
 
 import os, subprocess, zlib, time #Импорт модулей
@@ -25,7 +24,7 @@ sigs_local_path = "./sig.txt" #Путь хранения сигнатур для
 if mode: #Если mode равен 1
     sigs = subprocess.check_output('listdlls ' + process_name).decode("utf-8") #Пишем в переменную sigs результат выполнения команды listdlls с именем процесса, преобразованный в формат utf-8
     f = open(sigs_path, 'w') #Открываем файл по пути sigs_path на запись
-    f.write(sigs) #Пишем в открытй файл sigs
+    f.write(sigs) #Пишем в открытый файл sigs
     f.close() #Закрываем файл
 
     print("Сигнатуры процесса " + process_name + " созданы!")
