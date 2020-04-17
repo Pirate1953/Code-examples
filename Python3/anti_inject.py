@@ -15,7 +15,7 @@ import os, subprocess, zlib, time #Импорт модулей
 def crc(fileName): #Реализуем функцию с одним параметром
     prev = 0
     for eachLine in open(fileName, "rb"): #В цикле открываем файл с именем fileName в бинарном режиме для чтения и бежим по строкам
-        prev = zlib.crc32(eachLine, prev) #Вычисляем контрольеую сумму CRC из eachLine, начальное значение контрольной суммы = prev
+        prev = zlib.crc32(eachLine, prev) #Вычисляем контрольную сумму CRC из eachLine, начальное значение контрольной суммы = prev
     return "%X"%(prev & 0xFFFFFFFF) #Возврат строки с форматированием в шестнадцатиричное представление
 
 sigs_path = "./sigs/" + process_name + "_sigs.txt" #Путь для хранения сигнатур
