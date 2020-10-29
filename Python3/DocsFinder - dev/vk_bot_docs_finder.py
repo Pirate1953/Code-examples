@@ -80,7 +80,7 @@ def sendResponse(event, driver):
         write_msg(event.user_id, "Syntax: <!Lang name> <Class name>")
         return
 
-token = "INVALID_TOKEN"
+token = "5339341364f4650f4a7d8a8cf4f7daec771d279dce35f5bc40ebdb2f8a973625248a17a3d424c48c88f48"
 vk = vk_api.VkApi(token = token)
 longpoll = VkLongPoll(vk)
 
