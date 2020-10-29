@@ -21,6 +21,11 @@ def findDocsFirefox(req, driver):
     inputElement.send_keys(Keys.ARROW_DOWN)
     inputElement.send_keys(Keys.ENTER)
     time.sleep(1)
+    """ Doesn't work
+    if driver.current_url == "https://docs.oracle.com/en/java/javase/15/docs/api/index.html":
+        "No such class"
+    else:
+    """
     return driver.current_url
 
 def quitDriver(driver):
