@@ -20,7 +20,7 @@ def write_msg(user_id, message):
     'user_id' - user id
     'message' - the meassage to send
     """
-    vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': random.randint(1, 2147483647)})
+    vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': random.getrandbits(64)})
     return
 
 def findJavaDocsFirefox(req, driver):
@@ -56,6 +56,22 @@ def findCppDocsFirefox(req, driver):
     time.sleep(1)
     return driver.current_url
 
+def findPythonDocsFirefox(req, driver):
+    """
+    Displays Python documentation web page and simulates search using Firefox browser, then returns url of result page
+    'req' - text to input for search on the site
+    'driver' - web driver object
+    """
+    driver.get("https://docs.python.org/3/")
+
+    inputElement = driver.find_element_by_name("q")
+    #inputElement = WebDriverWait(driver, 1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#q")))
+    inputElement.clear()
+    inputElement.send_keys(req)
+    inputElement.send_keys(Keys.ENTER)
+    time.sleep(1)
+    return driver.current_url
+
 def quitDriver(driver):
     """
     Quits the driver and close every associated window
@@ -76,11 +92,14 @@ def sendResponse(event, driver):
     elif request.split(' ', maxsplit = 1)[0] == "!cpp":
         keyword = request.split(' ', maxsplit = 1)[1]
         write_msg(event.user_id, findCppDocsFirefox(keyword, driver))
+    elif request.split(' ', maxsplit = 1)[0] == "!py":
+        keyword = request.split(' ', maxsplit = 1)[1]
+        write_msg(event.user_id, findPythonDocsFirefox(keyword, driver))
     else:
         write_msg(event.user_id, "Syntax: <!Lang name> <Class name>")
         return
 
-token = "INVALID_TOKEN"
+token = ""
 vk = vk_api.VkApi(token = token)
 longpoll = VkLongPoll(vk)
 
