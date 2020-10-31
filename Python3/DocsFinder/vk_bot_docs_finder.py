@@ -84,17 +84,18 @@ def sendResponse(event, driver):
     """
     Checks name of given programming language and sends the search result url
     'event' - Event class object
+    'driver' - web driver object
     """
     request = event.text
     if request.split(' ', maxsplit = 1)[0] == "!java":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, findJavaDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "Java " + keyword + " - " + findJavaDocsFirefox(keyword, driver))
     elif request.split(' ', maxsplit = 1)[0] == "!cpp":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, findCppDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "C++ " + keyword + " - " + findCppDocsFirefox(keyword, driver))
     elif request.split(' ', maxsplit = 1)[0] == "!py":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, findPythonDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "Python " + keyword + " - " + findPythonDocsFirefox(keyword, driver))
     else:
         write_msg(event.user_id, "Syntax: <!Lang name> <Class name>")
         return
