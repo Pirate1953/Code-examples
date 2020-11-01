@@ -72,6 +72,39 @@ def findPythonDocsFirefox(req, driver):
     time.sleep(1)
     return driver.current_url
 
+def findVkAPIDocsFirefox(req, driver):
+    """
+    Displays Vk API documentation web page and simulates search using Firefox browser, then returns url of result page
+    'req' - text to input for search on the site
+    'driver' - web driver object
+    """
+    driver.get("https://vk-api.readthedocs.io/en/latest/")
+
+    inputElement = driver.find_element_by_name("q")
+    #inputElement = WebDriverWait(driver, 1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#q")))
+    inputElement.clear()
+    inputElement.send_keys(req)
+    inputElement.send_keys(Keys.ENTER)
+    time.sleep(1)
+    return driver.current_url
+
+def findDisAPIDocsFirefox(req, driver):
+    """
+    Displays Discord API documentation web page and simulates search using Firefox browser, then returns url of result page
+    'req' - text to input for search on the site
+    'driver' - web driver object
+    """
+    driver.get("https://discordpy.readthedocs.io/en/latest/index.html")
+
+    inputElement = driver.find_element_by_name("q")
+    #inputElement = WebDriverWait(driver, 1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#q")))
+    inputElement.clear()
+    inputElement.send_keys(req)
+    inputElement.send_keys(Keys.ENTER)
+    time.sleep(1)
+    return driver.current_url
+
+
 def quitDriver(driver):
     """
     Quits the driver and close every associated window
@@ -82,11 +115,17 @@ def quitDriver(driver):
 
 def sendResponse(event, driver):
     """
-    Checks name of given programming language and sends the search result url
+    Checks name of given programming language and sends the search result url. Also processes service commands
     'event' - Event class object
     'driver' - web driver object
     """
     request = event.text
+
+    if request == "!commands":
+        keyword = "!java - Java\n!cpp - C++\n!py - Python\n!vkpy - Vk API Python\n!dispy - Discord API Python"
+        write_msg(event.user_id, keyword)
+        return
+    
     if request.split(' ', maxsplit = 1)[0] == "!java":
         keyword = request.split(' ', maxsplit = 1)[1]
         write_msg(event.user_id, "Java " + keyword + " - " + findJavaDocsFirefox(keyword, driver))
@@ -96,6 +135,12 @@ def sendResponse(event, driver):
     elif request.split(' ', maxsplit = 1)[0] == "!py":
         keyword = request.split(' ', maxsplit = 1)[1]
         write_msg(event.user_id, "Python " + keyword + " - " + findPythonDocsFirefox(keyword, driver))
+    elif request.split(' ', maxsplit = 1)[0] == "!vkpy":
+        keyword = request.split(' ', maxsplit = 1)[1]
+        write_msg(event.user_id, "VK API Python " + keyword + " - " + findVkAPIDocsFirefox(keyword, driver))
+    elif request.split(' ', maxsplit = 1)[0] == "!dispy":
+        keyword = request.split(' ', maxsplit = 1)[1]
+        write_msg(event.user_id, "Discord API Python " + keyword + " - " + findDisAPIDocsFirefox(keyword, driver))
     else:
         write_msg(event.user_id, "Syntax: <!Lang name> <Class name>")
         return
