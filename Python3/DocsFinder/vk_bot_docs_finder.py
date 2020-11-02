@@ -23,7 +23,7 @@ def write_msg(user_id, message):
     vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': random.getrandbits(64)})
     return
 
-def findJavaDocsFirefox(req, driver):
+def findJavaDocs(req, driver):
     """
     Displays Java documentation web page and simulates search using Firefox browser, then returns url of result page
     'req' - text to input for search on the site
@@ -40,7 +40,7 @@ def findJavaDocsFirefox(req, driver):
     time.sleep(1)
     return driver.current_url
 
-def findCppDocsFirefox(req, driver):
+def findCppDocs(req, driver):
     """
     Displays Cpp documentation web page and simulates search using Firefox browser, then returns url of result page
     'req' - text to input for search on the site
@@ -56,7 +56,7 @@ def findCppDocsFirefox(req, driver):
     time.sleep(1)
     return driver.current_url
 
-def findPythonDocsFirefox(req, driver):
+def findPythonDocs(req, driver):
     """
     Displays Python documentation web page and simulates search using Firefox browser, then returns url of result page
     'req' - text to input for search on the site
@@ -72,7 +72,7 @@ def findPythonDocsFirefox(req, driver):
     time.sleep(1)
     return driver.current_url
 
-def findVkAPIDocsFirefox(req, driver):
+def findVkAPIDocs(req, driver):
     """
     Displays Vk API documentation web page and simulates search using Firefox browser, then returns url of result page
     'req' - text to input for search on the site
@@ -88,7 +88,7 @@ def findVkAPIDocsFirefox(req, driver):
     time.sleep(1)
     return driver.current_url
 
-def findDisAPIDocsFirefox(req, driver):
+def findDisAPIDocs(req, driver):
     """
     Displays Discord API documentation web page and simulates search using Firefox browser, then returns url of result page
     'req' - text to input for search on the site
@@ -100,6 +100,22 @@ def findDisAPIDocsFirefox(req, driver):
     #inputElement = WebDriverWait(driver, 1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, "#q")))
     inputElement.clear()
     inputElement.send_keys(req)
+    inputElement.send_keys(Keys.ENTER)
+    time.sleep(1)
+    return driver.current_url
+
+def findDocs(req1, req2, driver):
+    """
+    Finds documentation with Google and returns search result URL
+    'req1' - module/language name
+    'req2' - class name
+    'driver' - web driver object
+    """
+    driver.get("https://www.google.com")
+
+    inputElement = driver.find_element_by_name("q")
+    inputElement.clear()
+    inputElement.send_keys(req1 + " " + req2 + " documentation")
     inputElement.send_keys(Keys.ENTER)
     time.sleep(1)
     return driver.current_url
@@ -122,27 +138,29 @@ def sendResponse(event, driver):
     request = event.text
 
     if request == "!commands":
-        keyword = "!java - Java\n!cpp - C++\n!py - Python\n!vkpy - Vk API Python\n!dispy - Discord API Python"
+        keyword = "Syntax: <!Lang name> <Class name>\n!java - Java\n!cpp - C++\n!py - Python\n!vkpy - Vk API Python\n!dispy - Discord API Python\nLang/module name <space> class name - to search with Google"
         write_msg(event.user_id, keyword)
         return
     
     if request.split(' ', maxsplit = 1)[0] == "!java":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, "Java " + keyword + " - " + findJavaDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "Java " + keyword + " - " + findJavaDocs(keyword, driver))
     elif request.split(' ', maxsplit = 1)[0] == "!cpp":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, "C++ " + keyword + " - " + findCppDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "C++ " + keyword + " - " + findCppDocs(keyword, driver))
     elif request.split(' ', maxsplit = 1)[0] == "!py":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, "Python " + keyword + " - " + findPythonDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "Python " + keyword + " - " + findPythonDocs(keyword, driver))
     elif request.split(' ', maxsplit = 1)[0] == "!vkpy":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, "VK API Python " + keyword + " - " + findVkAPIDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "VK API Python " + keyword + " - " + findVkAPIDocs(keyword, driver))
     elif request.split(' ', maxsplit = 1)[0] == "!dispy":
         keyword = request.split(' ', maxsplit = 1)[1]
-        write_msg(event.user_id, "Discord API Python " + keyword + " - " + findDisAPIDocsFirefox(keyword, driver))
+        write_msg(event.user_id, "Discord API Python " + keyword + " - " + findDisAPIDocs(keyword, driver))
     else:
-        write_msg(event.user_id, "Syntax: <!Lang name> <Class name>")
+        keyword1 = request.split(' ', maxsplit = 1)[0]
+        keyword2 = request.split(' ', maxsplit = 1)[1]
+        write_msg(event.user_id, keyword1 + " " + keyword2 + " Documentation " + findDocs(keyword1, keyword2, driver))
         return
 
 token = ""
